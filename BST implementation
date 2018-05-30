@@ -1,0 +1,199 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+typedef struct Node{
+	int data;
+	struct Node *left;
+	struct Node *right;
+}node;
+
+node *root = NULL;
+
+node *insertNode(node *tree, int data){
+	if(root==NULL){
+		root = createNode(data);
+		return NULL;
+	}
+	if(tree==NULL){
+		return createNode(data);
+	}
+	if(data < tree->data){
+		tree->left = insertNode(tree->left, data);
+	}
+	else{
+		tree->right = insertNode(tree->right, data);
+	}
+}
+
+int createNode(int data){
+	node *newNode = malloc(sizeof(node));
+	
+	newNode -> data = data;
+	newNode -> left = NULL;
+	newNode -> right = NULL;
+	
+	printf("Node %d created\n", data);
+	
+	return newNode;
+}
+
+node *inorderTraverse(node *tree){
+	if(tree != NULL){
+		inorderTraverse(tree->left);
+		printf("%d ", tree->data);
+		inorderTraverse(tree->right);
+	}
+}
+
+node *postorderTraverse(node *tree){
+	if(tree != NULL){
+		postorderTraverse(tree->left);
+		postorderTraverse(tree->right);
+		printf("%d ", tree->data);
+	}
+}
+
+node *preorderTraverse(node *tree){
+	if(tree != NULL){
+		printf("%d ", tree->data);
+		preorderTraverse(tree->left);
+		preorderTraverse(tree->right); 
+	}
+}
+
+node *findNode(node *tree, int data){
+	if(tree == NULL){
+		return NULL;
+	}
+	else{
+		printf("%d ", tree->data);
+	}
+	
+	if(data == tree->data){
+		return tree;
+	}
+	
+	if(data < tree->data){
+		return findNode(tree->left, data);
+	}
+	else{
+		return findNode(tree->right, data);
+	}
+}
+
+int getHeight(node *tree){
+	if(tree == NULL){
+		return -1;
+	}
+	else{
+		return max(getHeight(tree->left), getHeight(tree->right)) + 1;
+	}
+}
+
+int max(int a, int b){
+	return (a > b ? a : b);
+}
+
+void removeValue(node **tree, int data){
+	if(*tree == NULL){
+		printf("\nCould not find value %d", data);
+		return;
+	}
+	
+	node *current = *tree;
+	
+	if(data > current->data){
+		removeValue(&(current->right), data);
+	}
+	else if(data < current->data){
+		removeValue(&(current->left), data);
+	}
+	else{
+		removeNode(tree);
+		printf("\nNode %d has been deleted", data);
+	}
+}
+
+void removeNode(node **tree){
+	node *current = *tree;
+	if(current->left == NULL && current->right == NULL){
+		*tree = NULL;
+		free(current);
+	}
+	else if(current->left == NULL){
+		*tree = current->right;
+		free(current);
+	}
+	else if(current->right == NULL){
+		*tree = current->left;
+		free(current);
+	}
+	else{
+		node **ptr = &(current->right);
+		while((*ptr)->left != NULL){
+			ptr = &((*ptr)->left);	
+		} 
+		
+		current->data = (*ptr)->data;
+		removeNode(ptr);
+	}
+}
+
+int main(void){
+	int cho, n;
+	
+	do{
+		printf("\n\n*******Creating a tree*******");
+		printf("\n 1. Insert Node");
+		printf("\n 2. Delete Node");
+		printf("\n 3. Inorder Traversal");
+		printf("\n 4. Postorder Traversal");
+		printf("\n 5. Preorder Traversal");
+		printf("\n 6. Find Node");
+		printf("\n 7. Height of the tree");
+		printf("\n 8. Exit");
+		printf("\n*************End*************");
+		
+		printf("\nEnter your choice : ");
+		scanf(" %d", &cho);
+		
+		switch(cho){
+			case 1 :
+				printf("\nEnter value : ");
+				scanf(" %d", &n);
+				insertNode(root, n);
+				break;
+			
+			case 2 :
+				printf("\nEnter the value you need to remove : ");
+				scanf(" %d", &n);
+				removeValue(&root, n);
+				break;
+			
+			case 3 :
+				inorderTraverse(root);
+				break;
+			
+			case 4 :
+				postorderTraverse(root);
+				break;
+			
+			case 5 :
+				preorderTraverse(root);
+				break;
+				
+			case 6 :
+				printf("\nEnter the node you want to find : ");
+				scanf(" %d", &n);
+				printf(" %s", findNode(root, n) ? "Found" : "Not found");	
+				break;
+			case 7 :
+				printf("\nHeight of the tree is : %d", getHeight(root));
+				break;
+		}
+		
+	}while(cho != 8);
+
+return 0;
+}
