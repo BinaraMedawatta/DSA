@@ -15,7 +15,7 @@ class Graph{
 		void addEdge(int v, int w);
 		void BFS(int s);
 		void DFS(int v);
-		int countPaths(int s, int d);	// https://www.geeksforgeeks.org/count-possible-paths-two-vertices/
+		int countPaths(int s, int d);
 };
 
 Graph :: Graph(int V){
