@@ -36,7 +36,7 @@ int main(){
 		printf("-----------------------WELCOME TO LAUGHS CAR PARK------------------------------\n");
 		printf("Please enter the number of inputs that you are going to enter - \n");
 		scanf("%d",&num); 
-		printf("Enter your inputs - \n");
+		printf("Enter your input - \n");
 		for(h=0;h<num;h++){
 			scanf("%s",inputList[h]); //The entered vehicle numbers will be inserted to inputList queue.
 		}
